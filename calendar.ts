@@ -1,3 +1,62 @@
+import React, { useState } from 'react';
+import Calendar from './Calendar'; // Import your calendar component
+
+interface Props {
+  onSelectDate: (date: Date) => void;
+}
+
+const DatePicker: React.FC<Props> = ({ onSelectDate }) => {
+  const [showCalendar, setShowCalendar] = useState<boolean>(false);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [displayedMonth, setDisplayedMonth] = useState<number>(new Date().getMonth());
+  const [displayedYear, setDisplayedYear] = useState<number>(new Date().getFullYear());
+
+  const handleDateChange = (date: Date) => {
+    setSelectedDate(date);
+    setShowCalendar(false);
+    onSelectDate(date);
+  };
+
+  const handlePrevMonth = () => {
+    const newMonth = displayedMonth === 0 ? 11 : displayedMonth - 1;
+    const newYear = displayedMonth === 0 ? displayedYear - 1 : displayedYear;
+    setDisplayedMonth(newMonth);
+    setDisplayedYear(newYear);
+  };
+
+  const handleNextMonth = () => {
+    const newMonth = displayedMonth === 11 ? 0 : displayedMonth + 1;
+    const newYear = displayedMonth === 11 ? displayedYear + 1 : displayedYear;
+    setDisplayedMonth(newMonth);
+    setDisplayedYear(newYear);
+  };
+
+  return (
+    <div className="relative">
+      <div className="flex items-center">
+        <button className="mr-2" onClick={handlePrevMonth}>&lt;</button>
+        <input
+          type="text" // Use text type to show the selected date
+          readOnly // Make the input read-only
+          className="appearance-none block w-full bg-white border border-gray-300 hover:border-gray-400 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+          value={selectedDate ? selectedDate.toLocaleDateString() : ''}
+          onClick={() => setShowCalendar(true)} // Show calendar when input is clicked
+        />
+        <button className="ml-2" onClick={handleNextMonth}>&gt;</button>
+      </div>
+      {showCalendar && (
+        <div className="absolute top-full left-0 z-10">
+          <Calendar onSelectDate={handleDateChange} displayedMonth={displayedMonth} displayedYear={displayedYear} />
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default DatePicker;
+
+
+
 
 import React, { useState } from 'react';
 
