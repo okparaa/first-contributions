@@ -1,3 +1,38 @@
+
+import React, { useState } from 'react';
+import Calendar from './Calendar'; // Import your calendar component
+
+const DatePicker = () => {
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+    setShowCalendar(false);
+  };
+
+  return (
+    <div className="relative">
+      <input
+        type="text" // Use text type to show the selected date
+        readOnly // Make the input read-only
+        className="appearance-none block w-full bg-white border border-gray-300 hover:border-gray-400 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+        value={selectedDate ? selectedDate.toLocaleDateString() : ''}
+        onClick={() => setShowCalendar(true)} // Show calendar when input is clicked
+      />
+      {showCalendar && (
+        <div className="absolute top-full left-0 z-10">
+          <Calendar onSelectDate={handleDateChange} />
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default DatePicker;
+
+
+
 import React, { useState } from 'react';
 
 const Calendar = ({ onSelectDate }) => {
